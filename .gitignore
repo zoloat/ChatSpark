@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+src-tauri/binaries/
+src-tauri/target/
+*.log
+image-index.json
+config.json

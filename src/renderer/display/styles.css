@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100vh;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: transparent;
+  font-family: Arial, sans-serif;
+}
+
+.display-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: transparent;
+}
+
+.particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.animation-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Particle Animation Styles */
+.particle {
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Falling Animation */
+@keyframes falling {
+  0% {
+    transform: translateY(-100px) rotateZ(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotateZ(360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.particle-falling {
+  animation: falling linear forwards;
+}
+
+/* Slide Out Animation */
+@keyframes slideOut {
+  0% {
+    transform: translateX(-100px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) scale(0.9);
+    opacity: 0;
+  }
+}
+
+.particle-slide-out {
+  animation: slideOut linear forwards;
+}
+
+/* Text Display */
+.text-display {
+  position: absolute;
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  z-index: 100;
+}
+
+@keyframes textFadeInOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+.text-fade {
+  animation: textFadeInOut 3s ease-in-out forwards;
+}
+
+/* Image Display */
+.image-display {
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@keyframes imageFadeInOut {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.image-fade {
+  animation: imageFadeInOut 3s ease-in-out forwards;
+}

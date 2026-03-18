@@ -1,0 +1,50 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "npm run build:sidecar",
+    "devPath": "http://localhost:39080/settings",
+    "distDir": "http://localhost:39080/settings"
+  },
+  "package": {
+    "productName": "twitch-overlay",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true,
+        "sidecar": true,
+        "execute": false
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.twitch-overlay.app",
+      "icon": [],
+      "externalBin": [
+        "binaries/twitch-server"
+      ]
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "Twitch チャット監視",
+        "width": 1100,
+        "height": 850,
+        "url": "http://localhost:39080/settings",
+        "visible": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effect Craft</title>
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <span class="app-logo">⚡ Effect Craft</span>
+      <input type="text" id="effectName" class="name-input" placeholder="エフェクト名" value="新規エフェクト" spellcheck="false">
+    </div>
+    <div class="header-right">
+      <button id="btnPlay" class="btn btn-primary">▶ 再生</button>
+      <button id="btnClear" class="btn btn-ghost">✕ クリア</button>
+      <button id="btnExport" class="btn btn-accent">💾 JSONエクスポート</button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="app-body">
+
+    <!-- Canvas area -->
+    <div class="canvas-area">
+      <div id="canvasWrapper" class="canvas-wrapper">
+        <canvas id="particleCanvas"></canvas>
+        <canvas id="markerCanvas"></canvas>
+        <div id="clickHint" class="click-hint" style="display:none">クリックで位置を設定</div>
+      </div>
+      <div class="canvas-footer">
+        <span id="canvasInfo" class="canvas-info">プレビュー</span>
+        <label class="checkbox-row small">
+          <input type="checkbox" id="showFloor" checked>
+          床ラインを表示
+        </label>
+      </div>
+    </div>
+
+    <!-- Controls panel -->
+    <div class="controls-panel" id="controlsPanel">
+
+      <!-- Image -->
+      <section class="ctrl-section">
+        <div class="ctrl-section-title">🖼 画像</div>
+        <div id="imageDropZone" class="image-drop-zone">
+          <span id="imageLabel">ファイルをドロップ or クリック</span>
+          <input type="file" id="imageInput" accept="image/*" style="display:none">
+        </div>
+        <div id="imagePreviewRow" class="image-preview-row" style="display:none">
+          <img id="imagePreview" class="image-thumb">
+          <div class="image-info">
+            <span id="imageFilename" class="filename"></span>
+            <button id="btnClearImage" class="btn btn-ghost small">✕</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Emitters -->
+      <section class="ctrl-section">
+        <div class="ctrl-section-title">
+          🎯 エミッター
+          <button id="btnAddEmitter" class="btn btn-ghost small">＋ 追加</button>
+        </div>
+        <div id="emitterList"></div>
+      </section>
+
+      <!-- Emission -->
+      <section class="ctrl-section">
+        <div class="ctrl-section-title">💫 放出設定</div>
+        <div class="ctrl-row">
+          <label>個数 <span class="hint">（バースト時）</span></label>
+          <input type="number" id="count" class="num-input" min="1" max="100" value="15">
+        </div>
+        <div class="ctrl-row">
+          <label>持続時間 <span class="hint">秒（0=バースト）</span></label>
+          <div class="range-row">
+            <input type="range" id="emissionDurationRange" min="0" max="30" step="0.5" value="0">
+            <input type="number" id="emissionDuration" class="num-input small" min="0" max="30" step="0.5" value="0">
+          </div>
+        </div>
+        <div class="ctrl-row" id="rowRate">
+          <label>放出レート <span class="hint">個/秒（ストリーム時）</span></label>
+          <div class="range-row">
+            <input type="range" id="emissionRateRange" min="0" max="20" step="0.5" value="3">
+            <input type="number" id="emissionRate" class="num-input small" min="0" max="20" step="0.5" value="3">
+          </div>
+        </div>
+      </section>
+
+      <!-- Physics -->
+      <section class="ctrl-section">
+        <div class="ctrl-section-title">⚙️ 物理</div>
+        <div class="ctrl-row">
+          <label>重力</label>
+          <div class="range-row">
+            <input type="range" id="gravityRange" min="0" max="3" step="0.05" value="1">
+            <input type="number" id="gravity" class="num-input small" min="0" max="3" step="0.05" value="1">
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <label>バウンス</label>
+          <div class="range-row">
+            <input type="range" id="bounceRange" min="0" max="1" step="0.05" value="0.5">
+            <input type="number" id="bounce" class="num-input small" min="0" max="1" step="0.05" value="0.5">
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <label>空気抵抗</label>
+          <div class="range-row">
+            <input type="range" id="resistanceRange" min="0" max="0.1" step="0.001" value="0.008">
+            <input type="number" id="resistance" class="num-input small" min="0" max="0.1" step="0.001" value="0.008">
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <label>摩擦</label>
+          <div class="range-row">
+            <input type="range" id="frictionRange" min="0" max="1" step="0.05" value="0.4">
+            <input type="number" id="friction" class="num-input small" min="0" max="1" step="0.05" value="0.4">
+          </div>
+        </div>
+        <div class="ctrl-row checks">
+          <label class="checkbox-row"><input type="checkbox" id="collisionEnabled" checked> 当たり判定あり</label>
+        </div>
+        <div class="ctrl-row checks" id="rowCollisionSub">
+          <label class="checkbox-row"><input type="checkbox" id="floorDetection" checked> 床で跳ねる</label>
+          <label class="checkbox-row"><input type="checkbox" id="wallCollision"> 壁で跳ねる</label>
+        </div>
+      </section>
+
+      <!-- Appearance -->
+      <section class="ctrl-section">
+        <div class="ctrl-section-title">✨ 見た目</div>
+        <div class="ctrl-row">
+          <label>当たり判定 <span class="hint">（0=大きい 1=小さい）</span></label>
+          <div class="range-row">
+            <input type="range" id="hitboxMaskRange" min="0" max="0.95" step="0.05" value="0.5">
+            <input type="number" id="hitboxMask" class="num-input small" min="0" max="0.95" step="0.05" value="0.5">
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <label>サイズ</label>
+          <div class="range-row">
+            <input type="range" id="sizeRange" min="0.2" max="5" step="0.1" value="1">
+            <input type="number" id="size" class="num-input small" min="0.2" max="5" step="0.1" value="1">
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <label>寿命 <span class="hint">秒</span></label>
+          <div class="range-row">
+            <input type="range" id="lifetimeRange" min="1" max="30" step="0.5" value="5">
+            <input type="number" id="lifetime" class="num-input small" min="1" max="30" step="0.5" value="5">
+          </div>
+        </div>
+        <div class="ctrl-row checks">
+          <label class="checkbox-row"><input type="checkbox" id="rotate" checked> 回転</label>
+          <label class="checkbox-row"><input type="checkbox" id="fadeOut" checked> フェードアウト</label>
+        </div>
+        <div class="ctrl-row" id="rowSpin">
+          <label>回転速度</label>
+          <div class="range-row">
+            <input type="range" id="spinRange" min="0" max="2" step="0.05" value="0.3">
+            <input type="number" id="spin" class="num-input small" min="0" max="2" step="0.05" value="0.3">
+          </div>
+        </div>
+      </section>
+
+      <!-- JSON Preview -->
+      <section class="ctrl-section">
+        <div class="ctrl-section-title">
+          {} JSON確認
+          <button id="btnToggleJson" class="btn btn-ghost small">表示</button>
+        </div>
+        <pre id="jsonPreview" class="json-preview" style="display:none"></pre>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script src="particle-engine.js"></script>
+  <script src="editor.js"></script>
+
+</body>
+</html>

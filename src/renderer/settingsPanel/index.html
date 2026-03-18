@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Twitch チャット監視 - 設定</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Twitch チャット監視アプリ</h1>
+      <p>配信支援ツール - チャットキーワードで OBS オーバーレイを自動表示</p>
+      <p style="margin-top:8px;font-size:12px;opacity:0.8">
+        OBS ブラウザソース URL: <code style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:4px">http://localhost:39080/display</code>
+        &nbsp;|&nbsp;
+        <a href="http://localhost:39080/effect-craft" target="_blank"
+           style="color:#fff;opacity:0.9;text-decoration:underline">🎨 Effect Craft を開く</a>
+        &nbsp;|&nbsp;
+        <input type="file" id="assetUploadInput" accept="image/*" multiple style="display:none">
+        <button id="assetUploadBtn" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px">📁 画像アップロード</button>
+        <span id="assetUploadStatus" style="font-size:11px;color:rgba(255,255,255,0.7)"></span>
+      </p>
+    </header>
+
+    <main>
+      <!-- Manual Section -->
+      <details class="section" style="cursor:pointer">
+        <summary style="font-size:18px;font-weight:700;color:#333;list-style:none;display:flex;justify-content:space-between;align-items:center">
+          <span>📖 使い方</span>
+          <span style="font-size:13px;font-weight:400;color:#667eea">クリックで開く</span>
+        </summary>
+        <div style="margin-top:16px;line-height:1.8;font-size:14px;color:#444">
+
+          <h3 style="color:#667eea;margin-bottom:8px">▶ 初回セットアップ手順</h3>
+          <ol style="margin-left:20px;margin-bottom:16px">
+            <li><strong>Twitch Developer Console</strong>（<code>https://dev.twitch.tv/console/apps</code>）にアクセス</li>
+            <li>「Register Your Application」でアプリを新規作成<br>
+              &nbsp;&nbsp;・名前: 任意（例: my-overlay）<br>
+              &nbsp;&nbsp;・OAuth リダイレクト URI: <code>http://localhost:39080/oauth/callback</code><br>
+              &nbsp;&nbsp;・カテゴリ: <strong>Chat Bot</strong><br>
+              &nbsp;&nbsp;・機密保持について: <strong>パブリック</strong>（Client Secret 不要のため）
+            </li>
+            <li>作成後に表示される <strong>クライアント ID</strong> をコピー</li>
+            <li>このページの「0. Twitch アプリ設定」に貼り付けて「保存」</li>
+            <li>「1. Twitch 認証」で「Twitch に接続」を押してログイン</li>
+            <li>Effect Craft（<code>effect-craft/index.html</code>）でエフェクトを作成して JSON をエクスポート</li>
+            <li>「2. トリガー設定」でキーワードとエフェクト JSON を設定して「設定を保存」</li>
+            <li>OBS のブラウザソースに <code>http://localhost:39080/display</code> を登録（詳しくは下の「4. OBS への追加方法」）</li>
+          </ol>
+
+          <h3 style="color:#667eea;margin-bottom:8px">▶ トリガータイプ</h3>
+          <table style="border-collapse:collapse;width:100%;margin-bottom:16px;font-size:13px">
+            <tr style="background:#f0f0f0">
+              <th style="padding:6px 12px;text-align:left;border:1px solid #ddd">タイプ</th>
+              <th style="padding:6px 12px;text-align:left;border:1px solid #ddd">説明</th>
+            </tr>
+            <tr>
+              <td style="padding:6px 12px;border:1px solid #ddd">チャット キーワード</td>
+              <td style="padding:6px 12px;border:1px solid #ddd">チャットに指定したワードが含まれると発動</td>
+            </tr>
+            <tr style="background:#fafafa">
+              <td style="padding:6px 12px;border:1px solid #ddd">チャンネルポイント</td>
+              <td style="padding:6px 12px;border:1px solid #ddd">チャンネルポイント報酬の名前と一致すると発動</td>
+            </tr>
+          </table>
+
+          <h3 style="color:#667eea;margin-bottom:8px">▶ エフェクト設定</h3>
+          <p style="font-size:13px;color:#444;margin-bottom:4px">
+            Effect Craft（<code>effect-craft/index.html</code>）でエフェクトを作成し、JSONをエクスポートして各トリガーに読み込んでください。
+          </p>
+
+          <h3 style="color:#667eea;margin-bottom:8px">▶ 画像の使い方</h3>
+          <ol style="margin-left:20px;margin-bottom:16px;font-size:13px">
+            <li>使いたい画像ファイル（PNG・GIF など）を以下のフォルダに置く<br>
+              <code style="font-size:12px">%APPDATA%\twitch-overlay-support\assets\</code>
+            </li>
+            <li>Effect Craft の「Image」欄にそのファイル名を入力（例: <code>star.png</code>）</li>
+            <li>エフェクト JSON をエクスポートしてトリガーに読み込む</li>
+          </ol>
+
+          <h3 style="color:#667eea;margin-bottom:8px">▶ 注意事項</h3>
+          <ul style="margin-left:20px">
+            <li>アプリを起動したまま OBS を使用してください</li>
+            <li>Client Secret は不要です（入力しないでください）</li>
+            <li>ポートを変えた場合は Twitch コンソールのリダイレクト URI も更新が必要です</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- Client ID Section -->
+      <section class="section" id="clientIdSection">
+        <h2>0. Twitch アプリ設定</h2>
+        <p style="font-size:13px;color:#666;margin-bottom:12px">
+          <a href="https://dev.twitch.tv/console/apps" target="_blank">Twitch Developer Console</a> でアプリを作成し、クライアント ID を入力してください。<br>
+          カテゴリ: <strong>Chat Bot</strong>　機密保持: <strong>パブリック</strong>　リダイレクト URI: <code>http://localhost:39080/oauth/callback</code>
+        </p>
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+          <div class="form-group" style="flex:1;min-width:260px">
+            <label>クライアント ID</label>
+            <input type="text" id="clientIdInput" placeholder="例: abc123def456ghi789" style="font-family:monospace">
+          </div>
+          <button id="saveClientIdBtn" class="btn btn-primary" style="height:36px">保存</button>
+        </div>
+        <p id="clientIdStatus" style="font-size:12px;margin-top:8px;color:#666"></p>
+      </section>
+
+      <!-- Authentication Section -->
+      <section class="section">
+        <h2>1. Twitch 認証</h2>
+        <div id="authContainer">
+          <div id="authNotConnected">
+            <p>「Twitch に接続」を押してブラウザで認証してください</p>
+            <button id="connectTwitchBtn" class="btn btn-primary" style="margin-top:10px">
+              Twitch に接続
+            </button>
+          </div>
+          <div id="authConnected" style="display: none;">
+            <p>✓ 接続済み: <strong id="usernameDisplay"></strong></p>
+            <p id="tokenExpireInfo" style="font-size: 0.9em; color: #666;"></p>
+            <button id="disconnectBtn" class="btn btn-secondary" style="margin-top:8px">接続解除</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section class="section">
+        <h2>2. トリガー設定</h2>
+        <div id="triggersContainer" class="triggers-container"></div>
+        <button id="addTriggerBtn" class="btn btn-secondary">+ 新しいトリガーを追加</button>
+      </section>
+
+      <!-- Preview Section -->
+      <section class="section">
+        <h2>3. プレビュー</h2>
+        <div class="preview-container">
+          <iframe id="previewFrame" src="http://localhost:39080/display" class="preview-frame"></iframe>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>4. OBS への追加方法</h2>
+        <div style="line-height:1.8;font-size:14px;color:#444">
+          <ol style="margin-left:20px">
+            <li>OBS の「ソース」パネルで「＋」をクリック →「ブラウザ」を選択</li>
+            <li>URL に <code>http://localhost:39080/display</code> を入力</li>
+            <li>幅と高さを<strong>配信画面と同じ解像度</strong>にする（例: 1920 × 1080）</li>
+            <li>背景は自動で透過されるので、そのまま他のソースに重ねて OK</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Save Button -->
+      <footer>
+        <button id="saveBtn" class="btn btn-success">設定を保存</button>
+        <button id="resetConfigBtn" class="btn btn-danger" style="margin-left: 10px;">設定を消去して初期化</button>
+        <p style="font-size:11px;color:rgba(255,200,100,0.8);margin:6px 0 0">⚠ 画像一覧は設定保存時に記録されます。画像を追加・削除した場合は保存を押し直してください。</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Trigger Template (hidden) -->
+  <template id="triggerTemplate">
+    <div class="trigger-item">
+      <div class="trigger-form">
+        <div class="form-group">
+          <label>トリガータイプ</label>
+          <select class="trigger-type">
+            <option value="keyword">チャット キーワード</option>
+            <option value="points">チャンネルポイント</option>
+          </select>
+        </div>
+        <div class="trigger-keyword-section">
+          <div class="form-group">
+            <label>キーワード</label>
+            <input type="text" class="trigger-word" placeholder="例：ナイス">
+          </div>
+        </div>
+        <div class="trigger-points-section" style="display: none;">
+          <div class="form-group">
+            <label>報酬名 (Twitch 設定と同じ名前)</label>
+            <input type="text" class="trigger-reward-name" placeholder="例：スーパーチャット">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>エフェクト</label>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <button class="btn btn-small load-effect-json-btn" type="button">📂 JSONを読み込む</button>
+            <button class="btn btn-small clear-effect-json-btn" type="button">✕ クリア</button>
+          </div>
+          <div class="effect-json-name" style="margin-top:4px;font-size:12px;color:#666">（未設定）</div>
+          <input type="file" class="effect-json-file" accept=".json" style="display:none">
+        </div>
+        <div class="button-group">
+          <button class="btn btn-info btn-small preview-trigger">プレビュー</button>
+          <button class="btn btn-danger btn-small delete-trigger">削除</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="settingsPanel.js"></script>
+</body>
+</html>
