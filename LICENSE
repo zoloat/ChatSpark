@@ -1,16 +1,18 @@
-MIT License
-
 Copyright (c) 2026 zoloat
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, and distribute the Software, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+
+2. The Software, or any substantial portion thereof, may not be sold or
+   included in a commercial product or service without the explicit written
+   permission of the copyright holder.
+
+3. You may not misrepresent the origin of the Software. You must not claim
+   that you created the original Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,3 +21,23 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Copyright (c) 2026 zoloat
+
+本ソフトウェアおよび関連ドキュメント（以下「本ソフトウェア」）の複製を
+取得したすべての人に対し、以下の条件のもとで無償で使用・複製・改変・
+配布する権利を許可します。
+
+1. 上記の著作権表示および本許可表示は、本ソフトウェアのすべての複製
+   または重要な部分に含めること。
+
+2. 本ソフトウェアまたはその重要な部分を、著作権者の明示的な書面による
+   許可なく、販売または商業製品・商業サービスに含めることを禁止します。
+
+3. 本ソフトウェアの出所を偽ってはなりません。オリジナルの本ソフトウェアを
+   自分が作成したと主張することを禁止します。
+
+本ソフトウェアは「現状のまま」提供され、商品性、特定目的への適合性、
+および非侵害性に関する保証を含む、明示または黙示の保証は一切ありません。
