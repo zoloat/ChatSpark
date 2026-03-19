@@ -25,7 +25,7 @@ const initAssets = () => {
   // pkg 実行時の __dirname を Function 経由で実行時評価させる
   // pkg 内では __dirname がグローバル未定義のため argv[1] で代替
   const runtimeDirname: string = isPkg
-    ? path.dirname(process.execPath)
+    ? path.dirname(process.argv[1])  // スナップショット内パス（dist/assets/ がある）
     : __dirname;
   const publicAssetsPath = isPkg
     ? path.join(runtimeDirname, 'assets')

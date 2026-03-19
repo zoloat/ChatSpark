@@ -92,7 +92,7 @@ export const saveConfig = (config: Config): void => {
 
 export function buildImageIndex(): Record<string, string[]> {
   const assetsDir = path.join(getDataDir(), 'assets');
-  if (!fs.existsSync(assetsDir)) return {};
+  if (!fs.existsSync(assetsDir)) fs.mkdirSync(assetsDir, { recursive: true });
 
   const files = fs.readdirSync(assetsDir);
   const index: Record<string, string[]> = {};

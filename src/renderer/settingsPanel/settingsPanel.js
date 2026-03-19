@@ -32,12 +32,23 @@ function setupEventListeners() {
     if (!files.length) return;
     const status = document.getElementById('assetUploadStatus');
     status.textContent = 'アップロード中...';
+    const failed = [];
     for (const file of files) {
       const form = new FormData();
       form.append('file', file);
-      await fetch('/api/assets/upload', { method: 'POST', body: form });
+      try {
+        const res = await fetch('/api/assets/upload', { method: 'POST', body: form });
+        const data = await res.json();
+        if (!res.ok || data.error) failed.push(file.name);
+      } catch {
+        failed.push(file.name);
+      }
     }
-    status.textContent = `✓ ${files.map(f => f.name).join(', ')}`;
+    if (failed.length) {
+      status.textContent = `❌ 失敗: ${failed.join(', ')}`;
+    } else {
+      status.textContent = `✓ ${files.map(f => f.name).join(', ')}`;
+    }
     e.target.value = '';
   });
 

@@ -63,7 +63,11 @@ export const startServer = () => {
   const settingsPath = path.join(baseDir, 'renderer/settingsPanel');
   const assetsPath = path.join(getDataDir(), 'assets');
 
-  expressApp.use('/assets', express.static(assetsPath));
+  expressApp.get('/assets/:file(*)', (req, res) => {
+    const filePath = path.join(assetsPath, req.params.file);
+    if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
+    res.sendFile(path.resolve(filePath));
+  });
   // matter.min.js 等をルートでも配信（display/index.html の絶対パス参照用）
   expressApp.use(express.static(displayPath));
   expressApp.use('/display', express.static(displayPath));
