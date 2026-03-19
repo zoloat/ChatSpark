@@ -6,3 +6,7 @@ src-tauri/target/
 *.log
 image-index.json
 config.json
+
+# AI / editor metadata
+CLAUDE.md
+.claude/
