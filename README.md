@@ -6,6 +6,8 @@
 > This is NOT an official Twitch product.
 
 ---
+## マニュアル
+- https://zoloat.github.io/ChatSpark/manual.html
 
 ## 機能
 
