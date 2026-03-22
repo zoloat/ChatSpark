@@ -498,8 +498,14 @@
     <div class="nav-section-label">はじめに</div>
     <a href="#overview" class="nav-link"><span class="icon">🗺</span> ChatSparkとは</a>
     <a href="#install" class="nav-link"><span class="icon">📦</span> インストール</a>
+    <a href="#mode-select" class="nav-link"><span class="icon">🔀</span> モード選択</a>
+
+    <div class="nav-section-label" style="margin-top:12px">Twitch モード</div>
     <a href="#twitch-dev" class="nav-link"><span class="icon">🔑</span> Twitch Dev登録</a>
     <a href="#setup" class="nav-link"><span class="icon">⚙️</span> 初期設定</a>
+
+    <div class="nav-section-label" style="margin-top:12px">MCV モード</div>
+    <a href="#mcv-setup" class="nav-link"><span class="icon">🔌</span> MCV セットアップ</a>
 
     <div class="nav-section-label" style="margin-top:12px">使い方</div>
     <a href="#obs" class="nav-link"><span class="icon">🎬</span> OBS連携</a>
@@ -556,6 +562,11 @@
         <div class="feature-card-icon">🖼</div>
         <h4>カスタム画像・GIF</h4>
         <p>好きな画像やGIFを登録してオリジナルエフェクトを作成</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-icon">🔌</div>
+        <h4>MCV 連携</h4>
+        <p>MultiCommentViewer 経由で YouTube・ニコニコ等の複数プラットフォームにも対応</p>
       </div>
       <div class="feature-card">
         <div class="feature-card-icon">🎨</div>
@@ -630,12 +641,54 @@
   </section>
 
 
-  <!-- 3. Twitch Developer登録 -->
-  <section class="section" id="twitch-dev">
+  <!-- 3. モード選択 -->
+  <section class="section" id="mode-select">
     <div class="section-header">
       <span class="section-num">03</span>
+      <div class="section-icon purple">🔀</div>
+      <h2 class="section-title">モード選択</h2>
+    </div>
+
+    <p>ChatSpark を起動するとまず<strong>インプット（コメント取得元）の選択画面</strong>が表示されます。用途に合わせてどちらかを選んでください。</p>
+
+    <table>
+      <thead>
+        <tr><th>モード</th><th>コメント取得元</th><th>チャンネルポイント</th><th>DEV登録</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>💬 Twitch モード</td>
+          <td>Twitch チャット</td>
+          <td>✅ 対応</td>
+          <td>必要</td>
+        </tr>
+        <tr>
+          <td>🔌 MCV モード</td>
+          <td>MultiCommentViewer 経由（Twitch・YouTube・ニコニコ等）</td>
+          <td>❌ 非対応</td>
+          <td>不要</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout info">
+      <span class="callout-icon">💡</span>
+      <p>Twitch のみ使う場合は <strong>Twitch モード</strong> が簡単です。YouTube やニコニコも使いたい場合や、Twitch DEV 登録が面倒な場合は <strong>MCV モード</strong> が便利です。</p>
+    </div>
+  </section>
+
+
+  <!-- 4. Twitch Developer登録 -->
+  <section class="section" id="twitch-dev">
+    <div class="section-header">
+      <span class="section-num">04</span>
       <div class="section-icon purple">🔑</div>
-      <h2 class="section-title">Twitch Developer登録</h2>
+      <h2 class="section-title">Twitch Developer登録 <span class="badge badge-new">Twitch モード</span></h2>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">ℹ️</span>
+      <p>この手順は <strong>Twitch モード</strong> を使う場合のみ必要です。MCV モードを使う場合はスキップして <a href="#mcv-setup" style="color:var(--accent)">MCV セットアップ</a> へ進んでください。</p>
     </div>
 
     <p>ChatSparkがTwitchのチャットを受信するには、あなた自身のTwitchアカウントで<strong>アプリケーションを登録</strong>して、専用のClient IDを取得する必要があります。</p>
@@ -761,9 +814,9 @@
   <!-- 4. 初期設定 -->
   <section class="section" id="setup">
     <div class="section-header">
-      <span class="section-num">04</span>
+      <span class="section-num">05</span>
       <div class="section-icon pink">⚙️</div>
-      <h2 class="section-title">初期設定</h2>
+      <h2 class="section-title">初期設定 <span class="badge badge-new">Twitch モード</span></h2>
     </div>
 
     <p>起動すると設定パネルが開きます。最初にTwitch認証を行います。</p>
@@ -824,10 +877,76 @@
   </section>
 
 
-  <!-- 5. OBS連携 -->
+  <!-- 6. MCV セットアップ -->
+  <section class="section" id="mcv-setup">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <div class="section-icon green">🔌</div>
+      <h2 class="section-title">MCV セットアップ <span class="badge badge-new">MCV モード</span></h2>
+    </div>
+
+    <p>MultiCommentViewer (MCV) の <strong>MCVCommentRelay プラグイン</strong> を使って、ChatSpark にコメントを送信します。Twitch DEV 登録は不要で、YouTube・ニコニコ等にも対応しています。</p>
+
+    <div class="callout info">
+      <span class="callout-icon">ℹ️</span>
+      <p>MCV モードでは<strong>キーワードトリガーのみ</strong>使用できます。チャンネルポイントトリガーは Twitch モードでのみ利用可能です。</p>
+    </div>
+
+    <h3>① MCV と MCVCommentRelay プラグインを用意する</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>MultiCommentViewer をインストール</h4>
+          <p>MCV がまだ入っていない場合は公式サイトからダウンロードしてインストールしてください。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>MCVCommentRelay プラグインを導入</h4>
+          <p>MCVCommentRelay プラグインを MCV のプラグインフォルダに配置します。</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>② プラグインの接続先を設定する</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>ChatSpark を先に起動する</h4>
+          <p>ChatSpark.exe を起動し、モード選択画面で「MCV」を選択しておきます。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>MCVCommentRelay の接続先を設定</h4>
+          <p>プラグインの接続先 URL を以下に設定してください：</p>
+          <pre><span class="url">http://localhost:39080</span></pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>接続を確認する</h4>
+          <p>設定パネルの「MCV 接続ステータス」が <strong>● 接続中</strong> に変われば成功です。MCV でコメントが流れると ChatSpark がトリガーを検知します。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <p>MCV より先に ChatSpark を起動しておいてください。ChatSpark が起動していないと MCVCommentRelay プラグインが接続できません。</p>
+    </div>
+  </section>
+
+
+  <!-- 7. OBS連携 -->
   <section class="section" id="obs">
     <div class="section-header">
-      <span class="section-num">05</span>
+      <span class="section-num">07</span>
       <div class="section-icon pink">🎬</div>
       <h2 class="section-title">OBS連携</h2>
     </div>
@@ -887,13 +1006,18 @@
   <!-- 6. トリガー設定 -->
   <section class="section" id="triggers">
     <div class="section-header">
-      <span class="section-num">06</span>
+      <span class="section-num">08</span>
       <div class="section-icon yellow">⚡</div>
       <h2 class="section-title">トリガー設定</h2>
     </div>
 
+    <div class="callout info">
+      <span class="callout-icon">ℹ️</span>
+      <p><strong>MCV モードをお使いの場合：</strong>チャットキーワードトリガーのみ利用できます。チャンネルポイントトリガーは Twitch モードでのみ対応しています。</p>
+    </div>
+
     <h3>💬 チャットトリガー</h3>
-    <p>チャット欄に特定のキーワードが投稿されたときにエフェクトを発動できます。</p>
+    <p>チャット欄に特定のキーワードが投稿されたときにエフェクトを発動できます。（Twitch モード・MCV モード 共通）</p>
     <table>
       <thead>
         <tr><th>項目</th><th>説明</th></tr>
@@ -905,8 +1029,8 @@
       </tbody>
     </table>
 
-    <h3>🎁 チャンネルポイントトリガー</h3>
-    <p>Twitchのチャンネルポイント報酬と連動させることができます。</p>
+    <h3>🎁 チャンネルポイントトリガー <span class="badge badge-warn">Twitch モードのみ</span></h3>
+    <p>Twitchのチャンネルポイント報酬と連動させることができます。この機能は Twitch モードでのみ利用可能です。</p>
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
@@ -936,7 +1060,7 @@
   <!-- 7. 画像・エフェクト -->
   <section class="section" id="images">
     <div class="section-header">
-      <span class="section-num">07</span>
+      <span class="section-num">09</span>
       <div class="section-icon yellow">🖼</div>
       <h2 class="section-title">画像・エフェクトの追加</h2>
     </div>
@@ -988,7 +1112,7 @@
   <!-- 8. Effect Craft -->
   <section class="section" id="effectcraft">
     <div class="section-header">
-      <span class="section-num">08</span>
+      <span class="section-num">10</span>
       <div class="section-icon green">🎨</div>
       <h2 class="section-title">Effect Craft</h2>
     </div>
@@ -1095,7 +1219,7 @@
   <!-- 8. トラブルシューティング -->
   <section class="section" id="trouble">
     <div class="section-header">
-      <span class="section-num">09</span>
+      <span class="section-num">11</span>
       <div class="section-icon green">🔧</div>
       <h2 class="section-title">トラブルシューティング</h2>
     </div>
@@ -1143,6 +1267,15 @@
     </div>
 
     <div class="trouble-item">
+      <div class="trouble-q">MCV 接続ステータスが「未接続」のまま変わらない</div>
+      <div class="trouble-a">
+        <p>① ChatSpark が起動しているか確認してください（MCV より先に起動する必要があります）。<br>
+        ② MCVCommentRelay プラグインの接続先が <code>http://localhost:39080</code> になっているか確認してください。<br>
+        ③ MCV 自体が起動していてコメント受信中かを確認してください。</p>
+      </div>
+    </div>
+
+    <div class="trouble-item">
       <div class="trouble-q">旧バージョンからアップグレードしたい</div>
       <div class="trouble-a">
         <p>① 旧バージョンのChatSparkを終了する。<br>
@@ -1157,7 +1290,7 @@
   <!-- 10. 注意事項 -->
   <section class="section" id="notes">
     <div class="section-header">
-      <span class="section-num">10</span>
+      <span class="section-num">12</span>
       <div class="section-icon purple">📝</div>
       <h2 class="section-title">注意事項</h2>
     </div>
