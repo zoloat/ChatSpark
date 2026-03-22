@@ -1,6 +1,6 @@
 {
   "name": "chatspark",
-  "version": "1.0.0",
+  "version": "1.10.0",
   "description": "Twitch chat & channel points → OBS particle effect overlay. Trigger visual effects from chat keywords.",
   "main": "dist/main/standalone.js",
   "scripts": {
