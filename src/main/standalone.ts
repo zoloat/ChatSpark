@@ -58,9 +58,9 @@ const main = async () => {
   initAssets();
   startServer();
 
-  // 設定パネルをブラウザで自動起動
+  // モード選択画面をブラウザで自動起動
   setTimeout(() => {
-    openInBrowser(`http://localhost:${PORT}/settings`);
+    openInBrowser(`http://localhost:${PORT}/`);
   }, 1000);
 
   // 認証済みなら起動後に自動でチャット＋EventSub接続

@@ -7,7 +7,7 @@ import * as os from 'os';
 import axios from 'axios';
 import multer from 'multer';
 import { loadConfig, saveConfig, getDataDir, buildImageIndex } from './configManager';
-import { connectToTwitchChat, stopChatMonitor, connectToEventSub, disconnectEventSub } from './chatMonitor';
+import { connectToTwitchChat, stopChatMonitor, connectToEventSub, disconnectEventSub, onChatMessage } from './chatMonitor';
 
 function getClientId(): string | undefined {
   const config = loadConfig();
@@ -60,7 +60,9 @@ export const startServer = () => {
   // pkg モード: renderer ファイルはスナップショット内 (argv[1]) に格納
   const baseDir = isPkg ? path.dirname(process.argv[1]) : path.join(__dirname, '..');
   const displayPath = path.join(baseDir, 'renderer/display');
-  const settingsPath = path.join(baseDir, 'renderer/settingsPanel');
+  const settingsTwitchPath = path.join(baseDir, 'renderer/settingsTwitch');
+  const settingsMCVPath = path.join(baseDir, 'renderer/settingsMCV');
+  const modeSelectPath = path.join(baseDir, 'renderer/modeSelect');
   const assetsPath = path.join(getDataDir(), 'assets');
 
   expressApp.get('/assets/:file(*)', (req, res) => {
@@ -68,15 +70,19 @@ export const startServer = () => {
     if (!fs.existsSync(filePath)) return res.status(404).send('Not found');
     res.sendFile(path.resolve(filePath));
   });
-  // matter.min.js 等をルートでも配信（display/index.html の絶対パス参照用）
-  expressApp.use(express.static(displayPath));
+  // display 用ライブラリ（matter.min.js 等）は /display 以下に限定して配信
   expressApp.use('/display', express.static(displayPath));
-  expressApp.use('/settings', express.static(settingsPath));
+  expressApp.use('/twitch', express.static(settingsTwitchPath));
+  expressApp.use('/mcv', express.static(settingsMCVPath));
+  expressApp.use('/', express.static(modeSelectPath));
 
-  expressApp.get('/display', (req, res) =>
-    res.sendFile(path.join(displayPath, 'index.html')));
-  expressApp.get('/settings', (req, res) =>
-    res.sendFile(path.join(settingsPath, 'index.html')));
+  expressApp.get('/display', (req, res) => res.redirect('/display/'));
+  expressApp.get('/twitch', (req, res) =>
+    res.sendFile(path.join(settingsTwitchPath, 'index.html')));
+  expressApp.get('/mcv', (req, res) =>
+    res.sendFile(path.join(settingsMCVPath, 'index.html')));
+  // /settings は旧URL互換（/twitch にリダイレクト）
+  expressApp.get('/settings', (req, res) => res.redirect('/twitch'));
 
   // Effect Craft エディタ: exe の隣に置かれたフォルダ (execPath) を参照
   const effectCraftPath = isPkg
@@ -265,10 +271,37 @@ export const startServer = () => {
     res.json({ success: true });
   });
 
+  // ── API: MCV接続ステータス ──────────────────────────────────
+  let mcvSocketId: string | null = null;
+
+  expressApp.get('/api/mcv/status', (req, res) => {
+    res.json({ connected: mcvSocketId !== null });
+  });
+
   // ── WebSocket ─────────────────────────────────────────────────
   io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
-    socket.on('disconnect', () => console.log(`Client disconnected: ${socket.id}`));
+
+    // MCV プラグインからの自己申告
+    socket.on('register-mcv', () => {
+      mcvSocketId = socket.id;
+      console.log(`MCV plugin registered: ${socket.id}`);
+      io.emit('mcvStatus', { connected: true });
+    });
+
+    // MCV プラグインからのコメント中継
+    socket.on('comment-from-mcv', (data: { text: string; username: string; platform?: string; timestamp?: number }) => {
+      onChatMessage(io, data.text, data.username);
+    });
+
+    socket.on('disconnect', () => {
+      console.log(`Client disconnected: ${socket.id}`);
+      if (socket.id === mcvSocketId) {
+        mcvSocketId = null;
+        console.log('MCV plugin disconnected');
+        io.emit('mcvStatus', { connected: false });
+      }
+    });
   });
 
   server.on('error', (err: NodeJS.ErrnoException) => {
@@ -280,8 +313,10 @@ export const startServer = () => {
 
   server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
-    console.log(`  Settings: http://localhost:${PORT}/settings`);
-    console.log(`  Display:  http://localhost:${PORT}/display`);
+    console.log(`  Mode Select: http://localhost:${PORT}/`);
+    console.log(`  Twitch:      http://localhost:${PORT}/twitch`);
+    console.log(`  MCV:         http://localhost:${PORT}/mcv`);
+    console.log(`  Display:     http://localhost:${PORT}/display`);
   });
 };
 

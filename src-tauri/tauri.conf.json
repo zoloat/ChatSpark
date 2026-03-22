@@ -3,8 +3,8 @@
   "build": {
     "beforeDevCommand": "",
     "beforeBuildCommand": "npm run build:sidecar",
-    "devPath": "http://localhost:39080/settings",
-    "distDir": "http://localhost:39080/settings"
+    "devPath": "http://localhost:39080/",
+    "distDir": "http://localhost:39080/"
   },
   "package": {
     "productName": "twitch-overlay",
@@ -42,7 +42,7 @@
         "title": "Twitch チャット監視",
         "width": 1100,
         "height": 850,
-        "url": "http://localhost:39080/settings",
+        "url": "http://localhost:39080/",
         "visible": false
       }
     ]

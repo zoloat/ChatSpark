@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Twitch チャット監視 - 設定</title>
+  <title>ChatSpark - Twitch 設定</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Twitch チャット監視アプリ</h1>
-      <p>配信支援ツール - チャットキーワードで OBS オーバーレイを自動表示</p>
+      <h1>Twitch モード</h1>
+      <p>Twitch チャット・チャンネルポイントに直接接続</p>
       <p style="margin-top:8px;font-size:12px;opacity:0.8">
         OBS ブラウザソース URL: <code style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:4px">http://localhost:39080/display</code>
         &nbsp;|&nbsp;
@@ -20,6 +20,8 @@
         <input type="file" id="assetUploadInput" accept="image/*" multiple style="display:none">
         <button id="assetUploadBtn" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px">📁 画像アップロード</button>
         <span id="assetUploadStatus" style="font-size:11px;color:rgba(255,255,255,0.7)"></span>
+        &nbsp;|&nbsp;
+        <a href="/" style="color:#fff;opacity:0.9;text-decoration:underline">モード選択に戻る</a>
       </p>
     </header>
 
@@ -199,6 +201,6 @@
     </div>
   </template>
 
-  <script src="settingsPanel.js"></script>
+  <script src="settingsTwitch.js"></script>
 </body>
 </html>

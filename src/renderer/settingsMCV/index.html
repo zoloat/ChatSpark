@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatSpark - MCV 設定</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>MCV モード</h1>
+      <p>MultiCommentViewer 経由でコメントを受信</p>
+      <p style="margin-top:8px;font-size:12px;opacity:0.8">
+        OBS ブラウザソース URL: <code style="background:rgba(255,255,255,0.2);padding:2px 6px;border-radius:4px">http://localhost:39080/display</code>
+        &nbsp;|&nbsp;
+        <a href="http://localhost:39080/effect-craft" target="_blank"
+           style="color:#fff;opacity:0.9;text-decoration:underline">Effect Craft を開く</a>
+        &nbsp;|&nbsp;
+        <input type="file" id="assetUploadInput" accept="image/*" multiple style="display:none">
+        <button id="assetUploadBtn" style="background:rgba(255,255,255,0.2);border:none;color:#fff;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px">画像アップロード</button>
+        <span id="assetUploadStatus" style="font-size:11px;color:rgba(255,255,255,0.7)"></span>
+        &nbsp;|&nbsp;
+        <a href="/" style="color:#fff;opacity:0.9;text-decoration:underline">モード選択に戻る</a>
+      </p>
+    </header>
+
+    <main>
+      <!-- MCV Connection Status -->
+      <section class="section">
+        <h2>1. MCV 接続ステータス</h2>
+        <div id="mcvStatusContainer">
+          <div id="mcvNotConnected">
+            <p class="status-indicator status-disconnected">● 未接続</p>
+            <p style="font-size:13px;color:#666;margin-top:8px">
+              MCVCommentRelay プラグインが接続されていません。<br>
+              MCV を起動し、プラグインの接続先が <code>http://localhost:39080</code> になっていることを確認してください。
+            </p>
+          </div>
+          <div id="mcvConnected" style="display:none">
+            <p class="status-indicator status-connected">● 接続中</p>
+            <p style="font-size:13px;color:#666;margin-top:8px">MCVCommentRelay プラグインからコメントを受信できます。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trigger Settings -->
+      <section class="section">
+        <h2>2. トリガー設定</h2>
+        <p style="font-size:13px;color:#666;margin-bottom:16px">
+          MCV 経由ではチャットキーワードのみ使用できます。チャンネルポイントは Twitch モードで設定してください。
+        </p>
+        <div id="triggersContainer" class="triggers-container"></div>
+        <button id="addTriggerBtn" class="btn btn-secondary">+ 新しいトリガーを追加</button>
+      </section>
+
+      <!-- Preview Section -->
+      <section class="section">
+        <h2>3. プレビュー</h2>
+        <div class="preview-container">
+          <iframe id="previewFrame" src="http://localhost:39080/display" class="preview-frame"></iframe>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>4. OBS への追加方法</h2>
+        <div style="line-height:1.8;font-size:14px;color:#444">
+          <ol style="margin-left:20px">
+            <li>OBS の「ソース」パネルで「＋」をクリック →「ブラウザ」を選択</li>
+            <li>URL に <code>http://localhost:39080/display</code> を入力</li>
+            <li>幅と高さを<strong>配信画面と同じ解像度</strong>にする（例: 1920 × 1080）</li>
+            <li>背景は自動で透過されるので、そのまま他のソースに重ねて OK</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Save Button -->
+      <footer>
+        <button id="saveBtn" class="btn btn-success">設定を保存</button>
+        <button id="resetConfigBtn" class="btn btn-danger" style="margin-left: 10px;">設定を消去して初期化</button>
+        <p style="font-size:11px;color:rgba(255,200,100,0.8);margin:6px 0 0">画像一覧は設定保存時に記録されます。画像を追加・削除した場合は保存を押し直してください。</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Trigger Template (hidden) -->
+  <template id="triggerTemplate">
+    <div class="trigger-item">
+      <div class="trigger-form">
+        <div class="form-group">
+          <label>キーワード</label>
+          <input type="text" class="trigger-word" placeholder="例：ナイス">
+        </div>
+        <div class="form-group">
+          <label>エフェクト</label>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <button class="btn btn-small load-effect-json-btn" type="button">JSONを読み込む</button>
+            <button class="btn btn-small clear-effect-json-btn" type="button">クリア</button>
+          </div>
+          <div class="effect-json-name" style="margin-top:4px;font-size:12px;color:#666">（未設定）</div>
+          <input type="file" class="effect-json-file" accept=".json" style="display:none">
+        </div>
+        <div class="button-group">
+          <button class="btn btn-info btn-small preview-trigger">プレビュー</button>
+          <button class="btn btn-danger btn-small delete-trigger">削除</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="/display/socket.io.min.js"></script>
+  <script src="settingsMCV.js"></script>
+</body>
+</html>
